@@ -14,7 +14,10 @@ def get_data(fasta_file,region=None):
         if isinstance(region,str):
             region = regions.parse_region(region)
 
-        chr = region["chr"]
+        if '.fa' in region['chr']:
+            chr = region['chr'].split('.fa')[0]
+        else:
+            chr = region["chr"]
         start = region["start"] - 1
         end = region["end"]
 

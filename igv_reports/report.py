@@ -263,73 +263,79 @@ def inline_script(line, o, source_type):
     else:
         raise ValueError("No file path in {l} for inline script.".format(l=line))
 
-# set up a parser
-parser = argparse.ArgumentParser()
-parser.add_argument("sites", help="vcf file defining variants, required")
-parser.add_argument("fasta", help="reference fasta file, required")
-parser.add_argument(
-    "--type",
-    help="Report type.  Possible values are mutation and junctions.  Default is mutation",
-)
-parser.add_argument("--ideogram", help="ideogram file in UCSC cytoIdeo format")
-parser.add_argument("--tracks", nargs="+", help="list of track files")
-parser.add_argument("--track-config", nargs="+", help="track json file")
-parser.add_argument(
-    "--sort",
-    help="initial sort option for alignment tracks.   Supported values include  BASE, STRAND, INSERT_SIZE, and MATE_CHR. Default value is BASE for single nucleotide variants, no sorting otherwise.  See the igv.js documentation for more information. ",
-)
-parser.add_argument("--template", help="html template file", default=None)
-parser.add_argument(
-    "--output", help="output file name", default="igvjs_viewer.html"
-)
-parser.add_argument(
-    "--info-columns",
-    nargs="+",
-    help="list of VCF info field names to include in variant table",
-)
-parser.add_argument(
-    "--info-columns-prefixes",
-    nargs="+",
-    help="list of prefixes of VCF info field names to include in variant table",
-)
-parser.add_argument(
-    "--sample-columns",
-    nargs="+",
-    help="list of VCF sample/format field names to include in variant table",
-)
-parser.add_argument(
-    "--flanking",
-    help="genomic region to include either side of variant",
-    default=1000,
-)
-parser.add_argument("--standalone", help="Print more data", action="store_true")
-parser.add_argument("--title", help="optional title string")
-parser.add_argument(
-    "--sequence",
-    help="Column of sequence (chromosome) name.  For tab-delimited sites file.",
-    default=None,
-)
-parser.add_argument(
-    "--begin",
-    help="Column of start position.  For tab-delimited sites file.",
-    default=None,
-)
-parser.add_argument(
-    "--end",
-    help="column of end position. For tab-delimited sites file.",
-    default=None,
-)
-parser.add_argument(
-    "--zero_based",
-    help="Specify that the position in the data file is 0-based (e.g. UCSC files) rather than 1-based.",
-    default=None,
-)
+def make_parser():
+    '''
+    Set up a parser for later use...
+    '''
+    parser = argparse.ArgumentParser()
+    parser.add_argument("sites", help="vcf file defining variants, required")
+    parser.add_argument("fasta", help="reference fasta file, required")
+    parser.add_argument(
+        "--type",
+        help="Report type.  Possible values are mutation and junctions.  Default is mutation",
+    )
+    parser.add_argument("--ideogram", help="ideogram file in UCSC cytoIdeo format")
+    parser.add_argument("--tracks", nargs="+", help="list of track files")
+    parser.add_argument("--track-config", nargs="+", help="track json file")
+    parser.add_argument(
+        "--sort",
+        help="initial sort option for alignment tracks.   Supported values include  BASE, STRAND, INSERT_SIZE, and MATE_CHR. Default value is BASE for single nucleotide variants, no sorting otherwise.  See the igv.js documentation for more information. ",
+    )
+    parser.add_argument("--template", help="html template file", default=None)
+    parser.add_argument(
+        "--output", help="output file name", default="igvjs_viewer.html"
+    )
+    parser.add_argument(
+        "--info-columns",
+        nargs="+",
+        help="list of VCF info field names to include in variant table",
+    )
+    parser.add_argument(
+        "--info-columns-prefixes",
+        nargs="+",
+        help="list of prefixes of VCF info field names to include in variant table",
+    )
+    parser.add_argument(
+        "--sample-columns",
+        nargs="+",
+        help="list of VCF sample/format field names to include in variant table",
+    )
+    parser.add_argument(
+        "--flanking",
+        help="genomic region to include either side of variant",
+        default=1000,
+    )
+    parser.add_argument("--standalone", help="Print more data", action="store_true")
+    parser.add_argument("--title", help="optional title string")
+    parser.add_argument(
+        "--sequence",
+        help="Column of sequence (chromosome) name.  For tab-delimited sites file.",
+        default=None,
+    )
+    parser.add_argument(
+        "--begin",
+        help="Column of start position.  For tab-delimited sites file.",
+        default=None,
+    )
+    parser.add_argument(
+        "--end",
+        help="column of end position. For tab-delimited sites file.",
+        default=None,
+    )
+    parser.add_argument(
+        "--zero_based",
+        help="Specify that the position in the data file is 0-based (e.g. UCSC files) rather than 1-based.",
+        default=None,
+    )
+    return parser
 
 def main():
+    parser = make_parser()
     args = parser.parse_args()
     create_report(args)
 
 def run(s:list):
+    parser = make_parser()
     args = parser.parse_args(s)
     create_report(args)    
 
